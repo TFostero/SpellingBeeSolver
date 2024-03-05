@@ -1,0 +1,13 @@
+apple
+ape
+cat
+fish
+dog
+hat
+pasta
+map
+pattern
+quiet
+spoke
+computer
+weight
