@@ -5,7 +5,7 @@ TARGET=sbsolve
 all: $(TARGET)
 
 $(TARGET): $(TARGET).cpp
-	$(CXX) $(CXXFLAGS) -o $(TARGET).exe $(TARGET).cpp  Node.cpp Trie.cpp
+	$(CXX) $(CXXFLAGS) -o $(TARGET).exe $(TARGET).cpp  Node.cpp Trie.cpp Checker.cpp
 
 clean:
 	rm -f $(TARGET)
