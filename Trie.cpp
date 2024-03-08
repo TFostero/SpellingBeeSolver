@@ -94,23 +94,25 @@ Node* Trie::deserializeTrie(ifstream& infile) {
     return node;
 }
 
-void Trie::saveTrieToFile(const string& filename) {
+void Trie::saveTrieToFile(Trie trie, const string& filename) {
     ofstream outfile(filename);
     if (outfile.is_open()) {
-        serializeTrie(root, outfile);
+        trie.serializeTrie(trie.root, outfile);
         outfile.close();
     } else {
         cout << "Unable to open file: " << filename << endl;
     }
 }
 
-void Trie::loadTrieFromFile(const string& filename) {
+Trie Trie::loadTrieFromFile(const string& filename) {
     ifstream infile(filename);
-    root = nullptr;
+    Trie trie;
+    trie.root = nullptr;
     if (infile.is_open()) {
-        root = deserializeTrie(infile);
+        trie.root = trie.deserializeTrie(infile);
         infile.close();
     } else {
         cout << "Unable to open file: " << filename << endl;
     }
+    return trie;
 }

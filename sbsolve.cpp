@@ -1,6 +1,4 @@
 #include "sbsolve.h"
-#include "Trie.h"
-#include "Checker.h"
 
 using namespace std;
 
@@ -19,6 +17,7 @@ int main(int argc, char* argv[]) {
         return 1;
     }
 
+    string dictfile = string(argv[1]);
     string optionalChars = string(argv[2]);
     string requiredChars = string(argv[3]);
     cout << "Optional characters: " << optionalChars << "\n";
@@ -30,49 +29,9 @@ int main(int argc, char* argv[]) {
 
     start = chrono::high_resolution_clock::now();
 
-    vector<Trie> tries(THREAD_COUNT);
-    for (int i = 0; i < THREAD_COUNT; i++) {
-        string fileName = "Bin/trie" + to_string(i) + ".bin";
-        tries[i].loadTrieFromFile(fileName);
-        if (!tries[i].root) {
-            ifstream DictFile(argv[1]);
-            vector<string> dict;
-            string text;
-            while (getline(DictFile, text)) {
-                dict.push_back(text);
-            }
+    Solver solver(dictfile);
 
-            vector<vector<string>> dictChunks(THREAD_COUNT);
-            int count = 0;
-            while(count < dict.size()) {
-                for (int i = 0; i < THREAD_COUNT; i++) {
-                    dictChunks[i].push_back(dict[count]);
-                    count++;
-                }
-            }
-
-            for (int i = 0; i < THREAD_COUNT; i++) {
-                Trie trie;
-                for (string word : dictChunks[i]) {
-                    trie.insert(word);
-                }
-                tries[i] = trie;
-            }
-
-            tries[i].saveTrieToFile(fileName);
-        }
-    }
-
-    vector<future<vector<string>>> futures;
-    for (int i = 0; i < THREAD_COUNT; i++) {
-        futures.push_back(async(launch::async, &Trie::solve, tries[i], optionalChars, requiredChars));
-    }
-
-    vector<string> results;
-    for (auto& future : futures) {
-        vector<string> result = future.get();
-        results.insert(results.end(), result.begin(), result.end());
-    }
+    vector<string> results = solver.solve(optionalChars, requiredChars);
 
     end = chrono::high_resolution_clock::now();
     duration = end - start;

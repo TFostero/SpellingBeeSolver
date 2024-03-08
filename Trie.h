@@ -21,8 +21,8 @@ class Trie {
     vector<string> solve(string optionalChars, string requiriedChars);
     void serializeTrie(Node* node, ofstream& outfile);
     Node* deserializeTrie(ifstream& infile);
-    void saveTrieToFile(const string& filename);
-    void loadTrieFromFile(const string& filename);
+    static void saveTrieToFile(Trie trie, const string& filename);
+    static Trie loadTrieFromFile(const string& filename);
 
     private:
     void solveHelper(Node* node, vector<string>& validWords, string optionalChars, string requiriedChars, string wordSoFar);
