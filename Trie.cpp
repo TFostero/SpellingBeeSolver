@@ -6,11 +6,31 @@ Trie::Trie() {
 }
 
 void Trie::insert(string word) {
-    insertHelper(root, word, 0);
+    Node* current = root;
+    for (char c : word) {
+        if (c < 'a' || c > 'z') {
+            return;
+        }
+        int index = c - 'a';
+    
+        if (current->children[index] == nullptr) {
+            current->children[index] = new Node();
+        }
+        current = current->children[index];
+    }
+    current->isWord = true;
 }
 
 bool Trie::search(string word) {
-    return searchHelper(root, word, 0);
+    Node* current = root;
+    for (char c : word) {
+        int index = c - 'a';
+        if (!current->children[index]) {
+            return false; // Word not found
+        }
+        current = current->children[index];
+    }
+    return current != nullptr && current->isWord;
 }
 
 vector<string> Trie::solve(string optionalChars, string requiriedChars) {
@@ -20,60 +40,31 @@ vector<string> Trie::solve(string optionalChars, string requiriedChars) {
     return words;
 }
 
-void Trie::insertHelper(Node* node, string word, int i) {
-    if (i == word.size()) {
-        node->isWord = true;
-        return;
-    }
-
-    auto p = node->map.find(word[i]);
-    if (p == node->map.end()) {
-        Node* n = new Node();
-        node->map.insert(make_pair(word[i], n));
-        insertHelper(n, word, i + 1);
-    } else {
-        insertHelper(p->second, word, i + 1);
-    }
-}
-
-bool Trie::searchHelper(Node* node, string word, int i) {
-    if (i == word.size() && node->isWord) {
-        return true;
-    }
-    
-    auto p = node->map.find(word[i]);
-    if (p == node->map.end()) {
-        return false;
-    } else {
-        return searchHelper(p->second, word, i + 1);
-    }
-}
-
 void Trie::solveHelper(Node* node, vector<string>& validWords, string optionalChars, string requiriedChars, string wordSoFar) {
     // check if the word so far is a word and contains the required characters
     if (node->isWord) {
         bool valid = true;
-        if (wordSoFar.size() < 3) {
+        if (wordSoFar.size() < MIN_WORD_LENGTH) {
             valid = false;
         } else {
-            for (int i = 0; i < requiriedChars.size(); i++) {
-                if (wordSoFar.find(requiriedChars[i]) == string::npos) {
+            for (char c : requiriedChars) {
+                if (wordSoFar.find(c) == string::npos) {
                     valid = false;
                     break;
                 }
             }
         }
         if (valid) {
-            validWords.emplace_back(wordSoFar);
+            validWords.push_back(wordSoFar);
         }
     }
 
     string loopChars = optionalChars + requiriedChars;
 
-    for (int i = 0; i < loopChars.size(); i++) {
-        auto p = node->map.find(loopChars[i]);
-        if (p != node->map.end()) {
-            solveHelper(p->second, validWords, optionalChars, requiriedChars, wordSoFar + loopChars[i]);
+    for (char c : loopChars) {
+        int index = c - 'a';
+        if (node->children[index]) {
+            solveHelper(node->children[index], validWords, optionalChars, requiriedChars, wordSoFar + c);
         }
     }
 }
@@ -84,8 +75,8 @@ void Trie::serializeTrie(Node* node, ofstream& outfile) {
         return;
     }
     outfile << node->isWord << " ";
-    for (auto& p : node->map) {
-        serializeTrie(p.second, outfile);
+    for (int i = 0; i < ALPHAS; ++i) {
+        serializeTrie(node->children[i], outfile);
     }
 }
 
@@ -97,9 +88,29 @@ Node* Trie::deserializeTrie(ifstream& infile) {
     }
     Node* node = new Node();
     node->isWord = stoi(val);
-
-    for (auto& p : node->map) { 
-        p.second = deserializeTrie(infile);
+    for (int i = 0; i < ALPHAS; ++i) {
+        node->children[i] = deserializeTrie(infile);
     }
     return node;
+}
+
+void Trie::saveTrieToFile(const string& filename) {
+    ofstream outfile(filename);
+    if (outfile.is_open()) {
+        serializeTrie(root, outfile);
+        outfile.close();
+    } else {
+        cout << "Unable to open file: " << filename << endl;
+    }
+}
+
+void Trie::loadTrieFromFile(const string& filename) {
+    ifstream infile(filename);
+    root = nullptr;
+    if (infile.is_open()) {
+        root = deserializeTrie(infile);
+        infile.close();
+    } else {
+        cout << "Unable to open file: " << filename << endl;
+    }
 }

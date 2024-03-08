@@ -4,11 +4,13 @@
 
 #include <unordered_map>
 
+#define ALPHAS 26
+
 using namespace std;
 
 class Node {
     public:
-    unordered_map<char, Node*> map;
+    Node* children[ALPHAS];
     bool isWord;
 
     Node();

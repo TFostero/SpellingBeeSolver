@@ -6,5 +6,4 @@
 #include <algorithm>
 #include <chrono>
 
-#define THREAD_CNT 1
-#define CHUNKS 16
+#define THREAD_COUNT 16
