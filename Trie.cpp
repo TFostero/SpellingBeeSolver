@@ -77,3 +77,29 @@ void Trie::solveHelper(Node* node, vector<string>& validWords, string optionalCh
         }
     }
 }
+
+void Trie::serializeTrie(Node* node, ofstream& outfile) {
+    if (node == nullptr) {
+        outfile << "/ "; // Using '/' to represent a null node
+        return;
+    }
+    outfile << node->isWord << " ";
+    for (auto& p : node->map) {
+        serializeTrie(p.second, outfile);
+    }
+}
+
+Node* Trie::deserializeTrie(ifstream& infile) {
+    string val;
+    infile >> val;
+    if (val == "/") {
+        return nullptr;
+    }
+    Node* node = new Node();
+    node->isWord = stoi(val);
+
+    for (auto& p : node->map) { 
+        p.second = deserializeTrie(infile);
+    }
+    return node;
+}

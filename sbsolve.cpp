@@ -4,85 +4,111 @@
 
 using namespace std;
 
-mutex mtx;
+static mutex mtx;
 
-// globals for multithreading
-int lineNum = 0;
-vector<string> words;
-vector<string> results;
+/*
+ * TODO: 
+ * create THREAD_CNT number of Trie objects with each being a subset of the dictionary words (dict.size() / THREAD_CNT)
+ * create binary files from those objects if they don't already exist
+ * create Trie objects from those binary files
+ * use async to call to both create Trie objects from binary files and call solve for those Trie objects
+ * 
+ * Start with just saving and using one Trie and see what the increase in speed is
+ */
 
-void solveThread(Checker checker) {
-    int idx;
-    int size;
+vector<string> solve(Checker checker, ifstream &dict) {
+    string word;
     mtx.lock();
-    idx = lineNum;
-    size = words.size();
-    mtx.unlock();
-
-    while (idx <= size - 1) {
-        mtx.lock();
-        string word = words[idx];
+    while (getline(dict, word)) {
         mtx.unlock();
-
         checker.check(word);
-
         mtx.lock();
-        lineNum++;
-        idx = lineNum;
-        mtx.unlock();
     }
 
-    vector<string> validWords = checker.getValidWords();
-    mtx.lock();
-    results.insert(results.end(), validWords.begin(), validWords.end());
     mtx.unlock();
+    return checker.getValidWords();
+}
 
+vector<string> solve2(Checker checker, vector<string> dict) {
+    for (auto& word : dict) {
+        checker.check(word);
+    }
+    return checker.getValidWords();
 }
 
 int main(int argc, char* argv[]) {
-    // Trie trie;
-    if (argc >= 2) {
-        ifstream DictFile(argv[1]);
-        string text;
-        while (getline(DictFile, text)) {
-            // cout << "Inserting word: " << text << "\n";
-            // trie.insert(text);
-            words.emplace_back(text);
-        }
+    if (argc != 4) {
+        return 1;
     }
 
+    chrono::time_point<chrono::_V2::system_clock> start, end;
+    chrono::duration<float> duration;
+    float ms;
+
+    start = chrono::high_resolution_clock::now();
+
+    ifstream DictFile(argv[1]);
+    // vector<string> dict;
+    vector<string> results;
+    Trie trie;
+    string text;
+    while (getline(DictFile, text)) {
+        trie.insert(text);
+    }
+
+    
     string optionalChars = string(argv[2]);
     string requiredChars = string(argv[3]);
     cout << "Optional characters: " << optionalChars << "\n";
     cout << "Required characters: " << requiredChars << "\n";
 
-    vector<Checker> checkers;
+    results = trie.solve(optionalChars, requiredChars);
+
+    /*
+    vector<future<vector<string>>> futures;
     for (int i = 0; i < THREAD_CNT; i++) {
         Checker checker = Checker(requiredChars, optionalChars);
-        checkers.emplace_back(checker);
+        futures.push_back(async(launch::async, solve, checker, ref(DictFile)));
+    }
+    */
+
+    /*   
+    vector<future<vector<string>>> futures;
+    int chunkSize = dict.size() / CHUNKS;
+    cout << "Dict size: " << dict.size() << "\n";
+    for (int i = 0; i < CHUNKS; i++) {
+        int start = i * chunkSize;
+        int end = (i * chunkSize) + (chunkSize - 1);
+
+        if (end >= dict.size()) {
+            end = dict.size() - 1;
+        }
+
+        vector<string> dictChunk(chunkSize);
+        copy(dict.begin() + start, dict.begin() + end, dictChunk.begin());
+        Checker checker = Checker(requiredChars, optionalChars);
+        futures.push_back(async(launch::async, solve2, checker, dictChunk));
     }
 
-    int line = 0;
-    thread threads[THREAD_CNT];
-    for (int i = 0; i < THREAD_CNT; i++) {
-        threads[i] = thread(solveThread, checkers[i]);
-    }
 
-    for (int i = 0; i < THREAD_CNT; i++) {
-        threads[i].join();
+    vector<string> results;
+    for (auto& future : futures) {
+        vector<string> result = future.get();
+        results.insert(results.end(), result.begin(), result.end());
     }
+    */
+
+    end = chrono::high_resolution_clock::now();
+    duration = end - start;
+    ms = duration.count() * 1000.0f;
+    cout << "Duration (ms): " << ms << "\n";
+
+
+    sort(results.begin(), results.end());
 
     for (auto& result : results) {
         cout << result << "\n";
     }
-
-    /*
-    vector<string> words = trie.solve(optionalChars, requiredChars);
-    cout << "Found " << words.size() << " matching words.\n";
-    for (auto& word : words) {
-        cout << word << "\n";
-    }
-    */
 
     return 0;
 }

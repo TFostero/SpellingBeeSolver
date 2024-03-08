@@ -4,6 +4,7 @@
 #include "Node.h"
 #include <string>
 #include <vector>
+#include <fstream>
 
 using namespace std;
 
@@ -14,6 +15,8 @@ class Trie {
     void insert(string word);
     bool search(string word);
     vector<string> solve(string optionalChars, string requiriedChars);
+    void serializeTrie(Node* node, ofstream& outfile);
+    Node* deserializeTrie(ifstream& infile);
 
     private:
     void insertHelper(Node* node, string word, int i);
