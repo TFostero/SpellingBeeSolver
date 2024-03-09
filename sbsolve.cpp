@@ -35,11 +35,5 @@ int main(int argc, char* argv[]) {
 
     sort(results.begin(), results.end());
 
-    for (auto& result : results) {
-        cout << result << "\n";
-    }
-
-    cout << results.size() << endl;
-
     return 0;
 }
