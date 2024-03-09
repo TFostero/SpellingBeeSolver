@@ -11,18 +11,18 @@
 #define TRIE_BIN_PATH "bin/trie"
 #define DICT_PATH "dicts/bigdict.txt"
 
+using namespace std;
 
 class Solver {
     public:
-    vector<Trie> tries;
     Solver();
-    vector<string> solve(string optionalChars, string requiredChars);
-
+    vector<string> solve(string, string);
 
     private:
+    vector<Trie> tries;
     vector<string> dict;
     vector<vector<string>> dictChunks;
-    void loadTrie(int index);
+    void loadTrie(int);
     void initDictionary(void);
 };
 

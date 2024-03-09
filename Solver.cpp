@@ -1,8 +1,7 @@
 #include "Solver.h"
 
+
 Solver::Solver() {
-    // if binaries exist -> create Tries from existing binaries
-    // if not, then create new Tries then save as binaries
     vector<future<Trie>> futures;
     for (int i = 0; i < THREAD_COUNT; i++) {
         string filename = TRIE_BIN_PATH + to_string(i);

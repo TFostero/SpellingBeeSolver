@@ -1,6 +1,6 @@
 CXX = g++
 CXXFLAGS = -g -Wall -pthread -std=c++11 
-SRCS = sbsolve.cpp Solver.cpp Trie.cpp Node.cpp
+SRCS = sbsolve.cpp Solver.cpp Trie.cpp Node.cpp ui.cpp
 OBJS = $(SRCS:.cpp=.o)
 EXEC = sbsolve.exe
 

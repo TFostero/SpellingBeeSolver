@@ -19,14 +19,14 @@ class Trie {
 
     void insert(string word);
     bool search(string word);
-    vector<string> solve(string optionalChars, string requiriedChars);
-    static void saveTrieToFile(Trie trie, const string& filename);
-    static Trie loadTrieFromFile(const string& filename);
+    vector<string> solve(string, string);
+    static void saveTrieToFile(Trie, const string&);
+    static Trie loadTrieFromFile(const string&);
 
     private:
-    void serializeTrie(Node* node, ofstream& outfile);
-    Node* deserializeTrie(ifstream& infile);
-    void solveHelper(Node* node, vector<string>& validWords, string optionalChars, string requiriedChars, string wordSoFar);
+    void serializeTrie(Node*, ofstream&);
+    Node* deserializeTrie(ifstream&);
+    void solveHelper(Node*, vector<string>&, string, string, string);
 };
 
 #endif 
