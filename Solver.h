@@ -1,12 +1,14 @@
 #ifndef SOLVER_H
 #define SOLVER_H
 
-#include <iostream>
-#include <fstream>
+#include <sys/stat.h>
+#include <errno.h>
 #include <future>
 #include "Trie.h"
 
-#define THREAD_COUNT 16
+#define THREAD_COUNT 8
+#define TRIE_BIN_PATH "bin/trie"
+#define TRIE_BIN "bin"
 
 class Solver {
     public:
@@ -18,7 +20,7 @@ class Solver {
     private:
     vector<string> dict;
     vector<vector<string>> dictChunks;
-    void loadTrie(string dictfile, int index);
+    void loadTrie(int index);
     void initDictionary(string dictfile);
 };
 

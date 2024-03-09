@@ -3,11 +3,9 @@
 Solver::Solver(string dictfile) {
     // if binaries exist -> create Tries from existing binaries
     // if not, then create new Tries then save as binaries
-
-    // TODO: figure out how to multithread this
     vector<future<Trie>> futures;
     for (int i = 0; i < THREAD_COUNT; i++) {
-        string filename = "Bin/trie" + to_string(i) + ".bin";
+        string filename = TRIE_BIN_PATH + to_string(i);
         futures.push_back(async(launch::async, &Trie::loadTrieFromFile, filename));
     }
 
@@ -15,23 +13,25 @@ Solver::Solver(string dictfile) {
         tries.push_back(future.get());
     }
 
+    // TODO: figure out how to multithread this
     for (int i = 0; i < THREAD_COUNT; i++) {
         if (!tries[i].root) {
-            loadTrie(dictfile, i);
+            if (dict.size() == 0) {
+                initDictionary(dictfile);
+            }
+            loadTrie(i);
         }
     }
 }
 
-void Solver::loadTrie(string dictfile, int index) {
-    if (dict.size() == 0) {
-        initDictionary(dictfile);
-    }
-    
+void Solver::loadTrie(int index) {
     Trie trie;
     for (string word : dictChunks[index]) {
         trie.insert(word);
     }
-    string filename = "Bin/trie" + to_string(index) + ".bin";
+    string filename = TRIE_BIN_PATH + to_string(index);
+    mkdir(TRIE_BIN, S_IRWXU | S_IRWXG);
+
     Trie::saveTrieToFile(trie, filename);
     tries[index] = trie;
 }
@@ -43,12 +43,12 @@ void Solver::initDictionary(string dictfile) {
         dict.push_back(text);
     }
 
-    int chunkSize = dict.size() / THREAD_COUNT;
-    for (int i = 0; i < THREAD_COUNT; i++) {
-        vector<string> dictChunk;
-        dictChunks.push_back(dictChunk);
-        for (int j = 0; j < chunkSize; j++) {
-            dictChunks[i].push_back(dict[i*chunkSize + j]);
+    dictChunks.resize(THREAD_COUNT);
+    size_t count = 0;
+    while (count < dict.size()) {
+        for (int i = 0; i < THREAD_COUNT; i++) {
+            dictChunks[i].push_back(dict[count]);
+            count++;
         }
     }
 }

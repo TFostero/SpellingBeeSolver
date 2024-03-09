@@ -55,7 +55,9 @@ void Trie::solveHelper(Node* node, vector<string>& validWords, string optionalCh
             }
         }
         if (valid) {
-            validWords.push_back(wordSoFar);
+            if (find(validWords.begin(), validWords.end(), wordSoFar) == validWords.end()) {
+                validWords.push_back(wordSoFar);
+            }
         }
     }
 

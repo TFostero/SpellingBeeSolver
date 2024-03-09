@@ -1,12 +1,15 @@
-CXX=g++
-CXXFLAGS=-g -Wall -std=c++11
-TARGET=sbsolve
+CXX = g++
+CXXFLAGS = -g -Wall -pthread -std=c++11 
+SRCS = sbsolve.cpp Solver.cpp Trie.cpp Node.cpp
+OBJS = $(SRCS:.cpp=.o)
+EXEC = sbsolve.exe
 
-all: $(TARGET)
+$(EXEC): $(OBJS)
+	$(CXX) $(CXXFLAGS) $(OBJS) -o $(EXEC)
 
-$(TARGET): $(TARGET).cpp
-	$(CXX) $(CXXFLAGS) -pthread -o $(TARGET).exe $(TARGET).cpp  Node.cpp Trie.cpp Checker.cpp Solver.cpp
+%.o: %.cpp
+	$(CXX) $(CXXFLAGS) -c $< -o $@
 
 clean:
-	rm -f $(TARGET)
+	rm -f $(OBJS) $(EXEC)
 
