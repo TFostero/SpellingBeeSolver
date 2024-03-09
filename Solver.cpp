@@ -1,6 +1,6 @@
 #include "Solver.h"
 
-Solver::Solver(string dictfile) {
+Solver::Solver() {
     // if binaries exist -> create Tries from existing binaries
     // if not, then create new Tries then save as binaries
     vector<future<Trie>> futures;
@@ -17,7 +17,7 @@ Solver::Solver(string dictfile) {
     for (int i = 0; i < THREAD_COUNT; i++) {
         if (!tries[i].root) {
             if (dict.size() == 0) {
-                initDictionary(dictfile);
+                initDictionary();
             }
             loadTrie(i);
         }
@@ -31,13 +31,12 @@ void Solver::loadTrie(int index) {
     }
     string filename = TRIE_BIN_PATH + to_string(index);
     mkdir(TRIE_BIN, S_IRWXU | S_IRWXG);
-
     Trie::saveTrieToFile(trie, filename);
     tries[index] = trie;
 }
 
-void Solver::initDictionary(string dictfile) {
-    ifstream DictFile(dictfile);
+void Solver::initDictionary() {
+    ifstream DictFile(DICT_PATH);
     string text;
     while (getline(DictFile, text)) {
         dict.push_back(text);

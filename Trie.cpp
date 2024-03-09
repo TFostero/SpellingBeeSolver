@@ -114,7 +114,7 @@ Trie Trie::loadTrieFromFile(const string& filename) {
         trie.root = trie.deserializeTrie(infile);
         infile.close();
     } else {
-        cout << "Unable to open file: " << filename << endl;
+        // cout << "Unable to open file: " << filename << endl;
     }
     return trie;
 }

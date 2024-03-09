@@ -7,13 +7,15 @@
 #include "Trie.h"
 
 #define THREAD_COUNT 8
-#define TRIE_BIN_PATH "bin/trie"
 #define TRIE_BIN "bin"
+#define TRIE_BIN_PATH "bin/trie"
+#define DICT_PATH "dicts/bigdict.txt"
+
 
 class Solver {
     public:
     vector<Trie> tries;
-    Solver(string dictfile);
+    Solver();
     vector<string> solve(string optionalChars, string requiredChars);
 
 
@@ -21,7 +23,7 @@ class Solver {
     vector<string> dict;
     vector<vector<string>> dictChunks;
     void loadTrie(int index);
-    void initDictionary(string dictfile);
+    void initDictionary(void);
 };
 
 #endif
