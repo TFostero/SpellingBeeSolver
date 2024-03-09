@@ -33,6 +33,7 @@ bool Trie::search(string word) {
     return current != nullptr && current->isWord;
 }
 
+// TODO: his function needs some work. 
 vector<string> Trie::solve(string optionalChars, string requiriedChars) {
     vector<string> words;
     string wordSoFar = "";
