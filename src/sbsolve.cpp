@@ -2,7 +2,7 @@
 
 using namespace std;
 
-int main() {
+int main() {    
     Solver solver;
     ui ui(solver);
     ui.startUI();

@@ -74,7 +74,7 @@ void Trie::solveHelper(Node* node, vector<string>& validWords, string optionalCh
 
 void Trie::serializeTrie(Node* node, ofstream& outfile) {
     if (node == nullptr) {
-        outfile << "/ "; // Using '/' to represent a null node
+        outfile << "* "; // Using '*' to represent a null node
         return;
     }
     outfile << node->isWord << " ";
@@ -86,7 +86,7 @@ void Trie::serializeTrie(Node* node, ofstream& outfile) {
 Node* Trie::deserializeTrie(ifstream& infile) {
     string val;
     infile >> val;
-    if (val == "/") {
+    if (val == "*") {
         return nullptr;
     }
     Node* node = new Node();
@@ -118,4 +118,8 @@ Trie Trie::loadTrieFromFile(const string& filename) {
         // cout << "Unable to open file: " << filename << endl;
     }
     return trie;
+}
+
+Node* Trie::getRoot() {
+    return root;
 }

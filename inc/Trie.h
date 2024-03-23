@@ -14,16 +14,17 @@ using namespace std;
 
 class Trie {
     public:
-    Node* root;
     Trie();
 
     void insert(string word);
     bool search(string word);
     vector<string> solve(string, string);
+    Node* getRoot();
     static void saveTrieToFile(Trie, const string&);
     static Trie loadTrieFromFile(const string&);
 
     private:
+    Node* root;
     void serializeTrie(Node*, ofstream&);
     Node* deserializeTrie(ifstream&);
     void solveHelper(Node*, vector<string>&, string, string, string);

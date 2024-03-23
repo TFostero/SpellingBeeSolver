@@ -12,9 +12,8 @@ Solver::Solver() {
         tries.push_back(future.get());
     }
 
-    // TODO: figure out how to multithread this
     for (int i = 0; i < THREAD_COUNT; i++) {
-        if (!tries[i].root) {
+        if (!tries[i].getRoot()) {
             if (dict.size() == 0) {
                 initDictionary();
             }
