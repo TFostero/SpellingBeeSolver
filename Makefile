@@ -25,5 +25,5 @@ $(BIN_DIR):
 	mkdir -p $(BIN_DIR)
 
 clean:
-	rm -f $(OBJS) $(EXEC)
+	rm -fr $(OBJS) $(EXEC) $(BIN_DIR)
 

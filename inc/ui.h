@@ -8,11 +8,10 @@ using namespace std;
 
 class ui {
     public:
-    ui(Solver);
-    void startUI();
+    ui();
+    void startUI(Solver&);
 
     private:
-    Solver solver;
     void processInput(string&);
 };
 

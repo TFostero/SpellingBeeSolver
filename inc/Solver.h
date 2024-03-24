@@ -2,11 +2,13 @@
 #define SOLVER_H
 
 #include <sys/stat.h>
+#include <sys/types.h>
+#include <string.h>
+#include <dirent.h>
 #include <errno.h>
 #include <future>
 #include "Trie.h"
 
-#define THREAD_COUNT 8
 #define TRIE_BIN "bin"
 #define TRIE_BIN_PATH "bin/trie"
 #define DICT_PATH "dicts/bigdict.txt"
@@ -16,14 +18,20 @@ using namespace std;
 class Solver {
     public:
     Solver();
+    Solver(unsigned int);
     vector<string> solve(string, string);
 
     private:
+    mutex triesMutex;
+    unsigned int threads;
     vector<Trie> tries;
     vector<string> dict;
     vector<vector<string>> dictChunks;
+    unsigned int countTrieFiles();
+    void clearBin();
+    bool deserializeTries();
     void loadTrie(int);
-    void initDictionary(void);
+    void initDictionary();
 };
 
 #endif

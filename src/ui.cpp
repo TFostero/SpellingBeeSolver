@@ -1,11 +1,8 @@
 #include "ui.h"
 
+ui::ui() {}
 
-ui::ui(Solver solver) {
-    this->solver = solver;
-}
-
-void ui::startUI() {
+void ui::startUI(Solver& solver) {
     bool loop = true;
 
     while (loop) {

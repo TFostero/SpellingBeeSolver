@@ -2,10 +2,11 @@
 
 using namespace std;
 
-int main() {    
-    Solver solver;
-    ui ui(solver);
-    ui.startUI();
+int main() {   
+    unsigned int threads = thread::hardware_concurrency(); 
+    Solver solver(threads);
+    ui ui;
+    ui.startUI(solver);
 
     return 0;
 }
