@@ -62,15 +62,20 @@ unsigned int Solver::countTrieFiles() {
 
 // return false if deseralizing fails or if no files initialized 
 bool Solver::deserializeTries() {
+    tries.clear();
+    tries.resize(this->threads);
     vector<future<Trie>> futures;
     for (unsigned int i = 0; i < this->threads; i++) {
         string filename = TRIE_BIN_PATH + to_string(i);
-        futures.push_back(async(launch::async, &Trie::loadTrieFromFile, filename));
+        futures.push_back(async(launch::async, &Trie::loadTrieFromFile, tries[i], filename));
     }
 
+    unsigned int i = 0;
     for (auto& future : futures) {
-        tries.push_back(future.get());
+        tries[i] = future.get();
+        i++;
     }
+    
 
     for (auto& trie : tries) {
         if (!trie.getRoot()) {

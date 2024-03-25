@@ -21,7 +21,7 @@ class Trie {
     vector<string> solve(string, string);
     Node* getRoot();
     void saveTrieToFile(const string&);
-    static Trie loadTrieFromFile(const string&);
+    Trie loadTrieFromFile(const string&);
 
     private:
     Node* root;

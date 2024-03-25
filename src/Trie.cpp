@@ -109,15 +109,14 @@ void Trie::saveTrieToFile(const string& filename) {
 
 Trie Trie::loadTrieFromFile(const string& filename) {
     ifstream infile(filename);
-    Trie trie;
-    trie.root = nullptr;
+    root = nullptr;
     if (infile.is_open()) {
-        trie.root = trie.deserializeTrie(infile);
+        root = deserializeTrie(infile);
         infile.close();
     } else {
         // cout << "Unable to open file: " << filename << endl;
     }
-    return trie;
+    return *this;
 }
 
 Node* Trie::getRoot() {
