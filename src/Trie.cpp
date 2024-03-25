@@ -97,10 +97,10 @@ Node* Trie::deserializeTrie(ifstream& infile) {
     return node;
 }
 
-void Trie::saveTrieToFile(Trie trie, const string& filename) {
+void Trie::saveTrieToFile(const string& filename) {
     ofstream outfile(filename);
     if (outfile.is_open()) {
-        trie.serializeTrie(trie.root, outfile);
+        serializeTrie(root, outfile);
         outfile.close();
     } else {
         cout << "Unable to open file: " << filename << endl;

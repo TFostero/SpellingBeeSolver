@@ -23,6 +23,7 @@ class Solver {
 
     private:
     mutex triesMutex;
+    mutex dictChunksMutex;
     unsigned int threads;
     vector<Trie> tries;
     vector<string> dict;

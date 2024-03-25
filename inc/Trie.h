@@ -20,7 +20,7 @@ class Trie {
     bool search(string word);
     vector<string> solve(string, string);
     Node* getRoot();
-    static void saveTrieToFile(Trie, const string&);
+    void saveTrieToFile(const string&);
     static Trie loadTrieFromFile(const string&);
 
     private:

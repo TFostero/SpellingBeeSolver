@@ -6,12 +6,13 @@ Solver::Solver() {};
 Solver::Solver(unsigned int threads) {
     this->threads = threads;
     if ((countTrieFiles() != this->threads) || !deserializeTries()) {
+        tries.clear();
+        tries.resize(this->threads);
         // clearBin();
         initDictionary();
 
         vector<thread> threads;
         for (unsigned int i = 0; i < this->threads; i++) { 
-            cout << "Creating trie " << i << endl;
             threads.push_back(thread(&Solver::loadTrie, this, i));
         }
 
@@ -84,9 +85,9 @@ bool Solver::deserializeTries() {
 void Solver::loadTrie(int index) {
     Trie trie;
 
-    triesMutex.lock();
+    dictChunksMutex.lock();
     vector<string> trieDict = dictChunks[index];
-    triesMutex.unlock();
+    dictChunksMutex.unlock();
 
     for (string word : trieDict) {
         trie.insert(word);
@@ -94,8 +95,8 @@ void Solver::loadTrie(int index) {
 
     string filename = TRIE_BIN_PATH + to_string(index);
     // mkdir(TRIE_BIN, S_IRWXU | S_IRWXG);
+    trie.saveTrieToFile(filename);
     triesMutex.lock();
-    Trie::saveTrieToFile(trie, filename);
     tries[index] = trie;
     triesMutex.unlock();
 }
@@ -118,7 +119,6 @@ void Solver::initDictionary() {
 }
 
 vector<string> Solver::solve(string optionalChars, string requiredChars) {
-    cout << tries.size() << endl;
     vector<future<vector<string>>> futures;
     for (unsigned int i = 0; i < this->threads; i++) {
         futures.push_back(async(launch::async, &Trie::solve, tries[i], optionalChars, requiredChars));
