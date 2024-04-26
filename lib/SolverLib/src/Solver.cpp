@@ -119,6 +119,7 @@ void Solver::initDictionary() {
     while (getline(DictFile, text)) {
         dict.push_back(text);
     }
+    DictFile.close();
 
     dictChunks.resize(this->threads);
     size_t count = 0;

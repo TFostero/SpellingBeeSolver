@@ -30,14 +30,14 @@ set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 FetchContent_MakeAvailable(googletest)
 
 add_executable(
-  sbsolve_test
-  test/sbsolve_test.cc
+  trie_test
+  test/trie_test.cc
 )
 
-target_link_libraries(sbsolve_test PUBLIC
+target_link_libraries(trie_test PUBLIC
   SolverLib
   GTest::gtest_main
 )
 
 include(GoogleTest)
-gtest_discover_tests(sbsolve_test)
+gtest_discover_tests(trie_test)
