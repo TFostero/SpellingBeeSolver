@@ -11,7 +11,8 @@
 
 #define TRIE_BIN "bin"
 #define TRIE_BIN_PATH "bin/trie"
-#define DICT_PATH "dicts/bigdict.txt"
+#define DICT_PATH_PRIMARY "dicts/bigdict.txt"
+#define DICT_PATH_SECONDARY "../dicts/bigdict.txt"
 
 using namespace std;
 

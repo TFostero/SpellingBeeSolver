@@ -107,7 +107,14 @@ void Solver::loadTrie(int index) {
 }
 
 void Solver::initDictionary() {
-    ifstream DictFile(DICT_PATH);
+    ifstream DictFile;
+    DictFile.open(DICT_PATH_PRIMARY, ifstream::in);
+    if (DictFile.fail()) {
+        DictFile.open(DICT_PATH_SECONDARY, ifstream::in);
+        if (DictFile.fail()) {
+            cout << "Failed to find dictionary file." << endl;
+        }
+    }
     string text;
     while (getline(DictFile, text)) {
         dict.push_back(text);
