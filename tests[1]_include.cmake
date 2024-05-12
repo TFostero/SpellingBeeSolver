@@ -1,0 +1,5 @@
+if(EXISTS "/home/t/tfostero/SpellingBeeSolver/tests[1]_tests.cmake")
+  include("/home/t/tfostero/SpellingBeeSolver/tests[1]_tests.cmake")
+else()
+  add_test(tests_NOT_BUILT tests_NOT_BUILT)
+endif()

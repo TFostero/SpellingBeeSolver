@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 3.14)
 
 project(SpellingBeeSolver)
 add_subdirectory(lib)
+add_subdirectory(client)
 # add_subdirectory(test)
 
 enable_testing()
