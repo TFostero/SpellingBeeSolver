@@ -12,6 +12,8 @@ add_executable(sbsolved
     src/sbsolve.cpp 
 )
 
+set(CMAKE_CXX_FLAGS -pthread)
+
 include_directories(${PROJECT_SOURCE_DIR}/lib/SolverLib/inc)
 target_link_libraries(sbsolved PUBLIC SolverLib)
 

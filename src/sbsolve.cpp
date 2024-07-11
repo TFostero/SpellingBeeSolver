@@ -57,6 +57,8 @@ int createServerSocket() {
         close(sfd);
         exit(1);
     }
+
+    chmod(SOCKET_PATH, S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH);
     
     return sfd;
 }

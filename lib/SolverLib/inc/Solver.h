@@ -10,7 +10,7 @@
 #include "Trie.h"
 
 #define DICT_PATH_PRIMARY "../dicts/sbsolvedict.txt"
-#define DICT_PATH_SECONDARY "/sbsolvedict.txt"
+#define DICT_PATH_SECONDARY "/usr/bin/sbsolvedict.txt"
 
 using namespace std;
 
