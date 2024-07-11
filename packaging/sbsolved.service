@@ -1,0 +1,9 @@
+[Unit]
+Description = Daemon for SpellingBeeSolver
+
+[Service]
+Type = simple
+ExecStart = /usr/bin/sbsolved
+
+[Install]
+WantedBy = multi-user.target

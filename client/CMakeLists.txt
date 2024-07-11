@@ -2,6 +2,6 @@ add_subdirectory(src)
 
 include_directories(inc)
 
-add_executable(client 
+add_executable(sbsolve 
     src/client.cpp
 )

@@ -3,19 +3,17 @@ cmake_minimum_required(VERSION 3.14)
 project(SpellingBeeSolver)
 add_subdirectory(lib)
 add_subdirectory(client)
-# add_subdirectory(test)
 
 enable_testing()
 
 include_directories(${PROJECT_SOURCE_DIR}/inc)
 
-add_executable(sbsolve 
+add_executable(sbsolved 
     src/sbsolve.cpp 
-    src/ui.cpp
 )
 
 include_directories(${PROJECT_SOURCE_DIR}/lib/SolverLib/inc)
-target_link_libraries(sbsolve PUBLIC SolverLib)
+target_link_libraries(sbsolved PUBLIC SolverLib)
 
 # GoogleTest requires at least C++14
 set(CMAKE_CXX_STANDARD 14)
@@ -42,3 +40,8 @@ target_link_libraries(trie_test PUBLIC
 
 include(GoogleTest)
 gtest_discover_tests(trie_test)
+
+add_subdirectory(packaging)
+install(TARGETS sbsolved sbsolve
+        DESTINATION /usr/bin
+)
