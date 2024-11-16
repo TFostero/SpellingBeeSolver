@@ -33,6 +33,7 @@
 
 *.cmake
 
+.idea/
 .vscode/
 bin/
 build/
